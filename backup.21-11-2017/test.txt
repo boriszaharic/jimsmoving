@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<body>
+<style>
+* {
+	padding:0;
+    margin:0;
+    transition: left 1s ease-in-out;
+}
+button {
+	padding: 5px 10px;
+    cursor:pointer;
+}
+.slideshowwr {
+	position:relative;
+ 	overflow:hidden;
+    height:600px;
+}
+.slideshow {
+	width:100%;
+    height:600px;
+	position:absolute;
+    left:100%;
+    opacity:0;
+}
+.slideshow img {
+	width:100%;
+    height:100%;   
+}
+</style>
+<div style="position:fixed;left:50%;transform: translate(-50%,0);z-index:5">
+	<button onclick="scrollToDiv('red');">Scroll To Red Div</button>
+    <button onclick="scrollToDiv('green');">Scroll To Green Div</button>
+    <button onclick="changeimage();" id="changeimagebtn">Change Image</button>
+    <button onclick="slideshow();">Slide</button>
+    
+</div>
+<div style="height:5000px;background:blue;position:relative" id="blue">
+<div id="red" style="position:absolute;height:500px;width:100%;background:red;top:40%"></div>
+<div id="green" style="position:absolute;height:500px;width:100%;background:green;top:60%"></div>
+</div>
+<div style="width:50px;height:50px;position:fixed;bottom:0;right:-50px;background:yellow;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;z-index:10" id="top" onclick="scrollToTop();">TOP</div>
+<div id="imageDiv"><img src="http://www.planwallpaper.com/static/images/wallpapers-hd-8000-8331-hd-wallpapers.jpg" style="width:100%"></div>
+<div style="height:500px;background:yellow"></div>
+
+
+<div class="slideshowwr" id="slideshow">
+	<button onclick="nextSlide();" style="position:absolute;left:0;top:50%;z-index:10">Next</button>
+    <button onclick="previousSlide();" style="position:absolute;right:0;top:50%;z-index:10">Previous</button>
+	<div class="slideshow" id="image1">
+		<img src="http://www.planwallpaper.com/static/images/wallpapers-hd-8000-8331-hd-wallpapers.jpg">
+		<div style="position:absolute;bottom:10%;left:10%;font-size:25px;color:white"><a href="#" style="text-decoration:none;color:white">Some text that describes image<div style="background:rgb(82, 109, 247);text-align:center;padding:5px 10px">Click here for more info</div></a></div>
+	</div>
+	<div class="slideshow" id="image2"><img src="https://static.pexels.com/photos/33045/lion-wild-africa-african.jpg"></div>
+    <div class="slideshow" id="image3"><img src="https://www.hdwallpapers.in/walls/autumn_bench-HD.jpg"></div>
+    <div class="slideshow" id="image4"><img src="https://static.pexels.com/photos/33109/fall-autumn-red-season.jpg"></div>
+    <div class="slideshow" id="image5"><img src="http://www.intrawallpaper.com/static/images/HD-Wallpapers-C76.jpg"></div>
+    <div class="slideshow" id="image6"><img src="https://wallpaperscraft.com/image/abstraction_light_neon_glitter_97687_1920x1080.jpg"></div>
+    <div class="slideshow" id="image7"><img src="https://wallpaperclicker.com/storage/wallpaper/Unique-And-Beautiful-Wallpaper-HD-58400924.jpg"></div>
+<div>
+
+<script>
+function scrollToDiv(el) {
+	var scroll = window.pageYOffset;
+    var animation;
+    if (scroll > document.getElementById(el).offsetTop) {
+    	animation = setInterval(function() {
+        	scrollTo(0,scroll);
+            scroll -= 40;
+            if(scroll <= document.getElementById(el).offsetTop) {
+            	clearInterval(animation);
+            }
+        },20);
+    } else {
+    	animation = setInterval(function() {
+        	scrollTo(0,scroll);           
+            if(scroll >= document.getElementById(el).offsetTop) {
+            	clearInterval(animation);
+            }
+            scroll += 40;
+        },20);
+    }
+}
+window.addEventListener("scroll",function() {
+	if(window.pageYOffset > document.getElementById("blue").offsetHeight / 2) {
+    document.getElementById("top").style.opacity = "1";
+    document.getElementById("top").style.right = "0px";
+    } else {
+    document.getElementById("top").style.opacity = "0";
+    document.getElementById("top").style.right = "-50px";    
+    }
+});
+
+function scrollToTop() {
+	var currentY = window.pageYOffset;
+    var toTop;    
+  	toTop = setInterval(function() {
+    scrollTo(0,currentY);
+    currentY -= 100;
+      if(currentY < -100) {
+          clearInterval(toTop);
+      }
+    console.log(currentY);
+  	},20);   
+}
+function changeimage() { 
+var nesto = document.getElementById("imageDiv").getElementsByTagName("img")[0].getAttribute("src");
+  if (nesto == "http://www.planwallpaper.com/static/images/wallpapers-hd-8000-8331-hd-wallpapers.jpg") {
+	document.getElementById("imageDiv").getElementsByTagName("img")[0].setAttribute(
+    "src",
+    "https://www.hdwallpapers.in/walls/autumn_bench-HD.jpg"
+    );
+    document.getElementById("changeimagebtn").innerHTML = "Change to ship";
+  } else {
+  	document.getElementById("imageDiv").getElementsByTagName("img")[0].setAttribute(
+    "src",
+    "http://www.planwallpaper.com/static/images/wallpapers-hd-8000-8331-hd-wallpapers.jpg"
+    );
+    document.getElementById("changeimagebtn").innerHTML = "Change to chair";
+  }
+}
+
+var image = 1;
+var next, previous,time,newTime,prev;
+function nextSlide() {
+	image = next;
+    
+    newTime = new Date();
+    if(time.getTime() < newTime.getTime()) {
+    	slideshow();
+    }
+}
+function previousSlide() {
+	image = previous;
+    newTime = new Date(); 
+    if(time.getTime() < newTime.getTime()) {
+		prev = 1;
+    	slideshow();
+    }
+}
+document.getElementById("image1").style.left = "0px";
+document.getElementById("image1").style.opacity = "1";
+function slideshow() {
+	time = new Date();
+    time.setSeconds(time.getSeconds() + 2);
+	switch (image) {
+    case 1:
+    	previous = 7;
+        next = image + 1;
+    	break;
+    case 2:
+    	previous = image - 1;
+        next = image + 1;
+        break;
+    case 3:
+    	previous = image - 1;
+        next = image + 1;
+        break;    
+    case 4:
+    	previous = image - 1;
+        next = image + 1;
+        break;
+    case 5:
+    	previous = image - 1;
+        next = image + 1;
+        break;
+    case 6:
+    	previous = image - 1;
+        next = image + 1;
+        break;
+    case 7:
+    	previous = image - 1;
+        next = 1;
+    }
+    for(var i = 1; i < 8; i++) {
+    	document.getElementById("image"+i).style.opacity = "0";
+        document.getElementById("image"+i).style.zIndex = "-1";
+    }
+    if(prev == 1) {
+		document.getElementById("image"+image).style.zIndex = "1";
+		document.getElementById("image"+image).style.left = "0px";
+		document.getElementById("image"+previous).style.left = "-100%";
+		document.getElementById("image"+previous).style.opacity = "0";
+		document.getElementById("image"+image).style.opacity = "1";
+		document.getElementById("image"+next).style.left = "100%";
+		document.getElementById("image"+next).style.opacity = "1";
+		setTimeout(function(){
+		document.getElementById("image"+next).style.opacity = "0";
+		},1000);
+		image = next; 
+		prev = 0;
+	} else {
+		document.getElementById("image"+image).style.zIndex = "1";
+		document.getElementById("image"+image).style.left = "0px";
+		document.getElementById("image"+previous).style.left = "-100%";
+		document.getElementById("image"+previous).style.opacity = "1";
+		setTimeout(function(){
+		document.getElementById("image"+previous).style.opacity = "0";
+		},1000);
+		document.getElementById("image"+image).style.opacity = "1";
+		document.getElementById("image"+next).style.left = "100%";
+		document.getElementById("image"+next).style.opacity = "0";
+		image = next;
+    }
+}
+var interval = setInterval(function(){
+  	slideshow();
+},3000);
+document.getElementById("slideshow").addEventListener("mouseover",function() {
+	clearInterval(interval);
+});
+document.getElementById("slideshow").addEventListener("mouseout",function() {
+	interval = setInterval(function(){
+  	slideshow();
+},3000);
+});
+
+</script>
+
+</body>
+</html>
